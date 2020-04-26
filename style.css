@@ -1,7 +1,7 @@
 body {
   background-color: #2d3047;
 }
-h1 {
+h1, #note {
   color: #ccdbdc;
 }
 p {

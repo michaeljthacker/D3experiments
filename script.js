@@ -9,7 +9,17 @@ var MyChart,
     yBuffer,
     yScale,
     xBuffer,
-    xScale; // Initialize some variables
+    xScale,
+    hold_color; // Initialize some variables
+
+var tooltip = d3
+  .select('body')
+  .append('div')
+  .style('position', 'absolute')
+  .style('padding', '0 10px')
+  .style('background', '#ccdbdc')
+  .style('color', '#2d3047')
+  .style('opacity', 0);
 
 yBuffer = Math.ceil(Math.abs(d3.max(data) - d3.min(data))*0.1);
 
@@ -40,7 +50,21 @@ MyChart = d3.select("#container1")
     .attr('x', function(d){ // bar position (horizontal)
       return xScale(d);
     })
-    .attr('y', height); // bar position (vertical -- adjusted in transition() now)
+    .attr('y', height) // bar position (vertical -- adjusted in transition() now)
+    .on('mouseover', function(d){
+      d3.select(this).transition().attr('fill', '#95d7ae').duration(100);
+    })
+    .on('mouseout', function(d){
+      d3.select(this).transition().attr('fill', '#419d78').duration(100);
+      tooltip.html('');
+    })
+    .on('click', function(d){
+      tooltip.transition().duration(200)
+        .style('opacity', .9);
+      tooltip.html('val:' + d)
+        .style('left', (d3.event.pageX - 50) + 'px')
+        .style('top', (d3.event.pageY - 50) + 'px');
+    });
 
 MyChart.transition()
   .attr('height', function(d){
